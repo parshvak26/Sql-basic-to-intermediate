@@ -1,0 +1,40 @@
+CREATE TABLE customers (
+  id INT PRIMARY KEY,
+  name VARCHAR(50),
+  email VARCHAR(100)
+);
+
+-------------------------------------------------------------------
+INSERT INTO customers (id, name, email)
+VALUES
+  (1, 'John Doe', 'john@example.com'),
+  (2, 'Jane Smith', 'jane@example.com'),
+  (3, 'Mike Johnson', 'mike@example.com'),
+  (4, 'Emily Davis', 'emily@example.com'),
+  (5, 'David Wilson', 'david@example.com');
+-------------------------------------------------------------------
+SELECT name, COALESCE(email, 'N/A') AS email
+FROM customers;
+------------------------------------------------------------------
+SELECT name
+FROM customers
+WHERE id IN (SELECT customer_id FROM orders);
+----------------------------------------------------------------
+CREATE TEMPORARY TABLE temp_results AS
+SELECT name, email
+FROM customers
+WHERE id IN (SELECT customer_id FROM orders);
+
+SELECT * FROM temp_results;
+------------------------------------------------------------------------
+SELECT e.name AS employee_name, m.name AS manager_name
+FROM employees e
+JOIN employees m ON e.manager_id = m.id;
+------------------------------------------------------------------
+WITH avg_salary AS (
+  SELECT AVG(salary) AS average FROM employees
+)
+SELECT name, salary
+FROM employees
+WHERE salary > (SELECT average FROM avg_salary);
+------------------------------------------------
